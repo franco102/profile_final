@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom' 
+import { BrowserRouter, Routes, Route } from 'react-router-dom' 
 import { AppLayout } from './layout/AppLayout'
 import { PortafolioView } from './views/PortafolioView'
 

@@ -1,29 +1,17 @@
 import { usePortafalioStore } from "../../store/portafolio.store"
+import { SectionHeader } from "../ui/SectionHeader"
 import { CardCurriculum } from "./curriculum/CardCurriculum"
 
 export const Curriculum = () => {
-    const curriculum=usePortafalioStore(state=>state.curriculum)
+  const jobs = usePortafalioStore(state => state.jobs)
   return (
-    <div id="curriculum" className="curriculum">
-        <div className="contenido-seccion">
-            <h2>Curriculum</h2>
-            <div className="fila">
-                <div className="col izquierda">
-                    <h3>Educación</h3>
-                    {
-                        curriculum.filter(education=>education.type==='education').map((education,index)=><CardCurriculum item={education} key={index}/>)
-                    }
-                    
-                </div>
-
-                <div className="col derecha">
-                    <h3>Experiencia de trabajo</h3>
-                    {
-                        curriculum.filter(job=>job.type==='job').map((job,index)=><CardCurriculum item={job} key={index}/>)
-                    }
-                </div>
-            </div>
+    <section id="experiencia" className="w-full bg-surface-container-lowest py-space-xl md:py-16 dot-grid">
+      <div className="max-w-site mx-auto px-gutter flex flex-col gap-space-lg">
+        <SectionHeader kicker="// 03. Trayectoria en Producción" title="Experiencia Laboral" />
+        <div className="relative flex flex-col gap-space-lg before:absolute before:top-4 before:bottom-4 before:left-2 md:before:left-1/2 before:w-0.5 before:bg-surface-container-highest">
+          {jobs.map(job => <CardCurriculum key={job.company} job={job} />)}
         </div>
-    </div >
+      </div>
+    </section>
   )
 }

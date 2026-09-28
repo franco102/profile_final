@@ -1,170 +1,183 @@
-import { create, StateCreator } from "zustand";
-import { devtools, persist } from "zustand/middleware";
-import { immer } from 'zustand/middleware/immer'
-import { Curriculum, Hobbie, LinkPortafolio, Portafolio, Skills, socialNetworks } from "../type";
- 
-interface PortafolioState { 
-  name:string
-  lastname:string
-  birthday:string
-  phone:string
-  email:string
-  address:string
-  position:string
-  mostrarOcultarMenu:()=> void
-  seleccionar:()=> void
-  efectoHabilidades:()=> void
-  menuVisible:boolean
-  listLink:LinkPortafolio[]
-  socialNetworks:socialNetworks[]
-  hobbies:Hobbie[]
-  skills: Skills[]
-  curriculum: Curriculum[]
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import { Education, FeaturedSystem, Job, LinkPortafolio, Portafolio, SkillGroup, SocialNetwork, Tool } from "../type";
+
+interface PortafolioState {
+  name: string
+  lastname: string
+  phone: string
+  whatsapp: string
+  email: string
+  location: string
+  position: string
+  cvEs: string
+  cvEn: string
+  listLink: LinkPortafolio[]
+  socialNetworks: SocialNetwork[]
+  softSkills: { name: string, icon: string }[]
+  skillGroups: SkillGroup[]
+  tools: Tool[]
+  jobs: Job[]
+  education: Education[]
+  featured: FeaturedSystem[]
   portafolio: Portafolio[]
 }
 
-
-const portafalioStore:StateCreator<PortafolioState,[["zustand/devtools", never], ["zustand/immer", never]]>=(set,get)=>({  
-    name:'Alan Franco', 
-    lastname:'Silva Huarachi',  
-    birthday:'27/10/1998',
-    phone:'+51 964118376',
-    email:'francodannaeyal@gmail.com',
-    address:'Urb. Santo Domingo 2da Etapa, Carabayllo (Lima-Lima-Perú)',
-    position:'Full-Stack',
-    menuVisible:false,
-    mostrarOcultarMenu:()=>{
-      const menu= document.getElementById("nav")
-      if(get().menuVisible){
-        if(menu){
-          menu.classList.remove("responsive");
-          set((state)=>{
-            state.menuVisible=false
-          }) 
-        }
-      }else{
-        if(menu){
-          menu.classList.add("responsive");
-          set((state)=>{
-            state.menuVisible=true
-          }) 
-        } 
-      }
-  },
-  seleccionar:()=>{
-    const menu= document.getElementById("nav") 
-    if(menu){
-      menu.classList.remove("responsive");
-      set((state)=>{
-        state.menuVisible=false
-      }) 
-    } 
-  },
-  efectoHabilidades:()=>{ 
-    const skills = document.getElementById("skills");
-    if(skills){
-      const distancia_skills = window.innerHeight - skills.getBoundingClientRect().top;
-      if(distancia_skills >= 300){
-          let habilidades = document.querySelectorAll(".progreso");
-          habilidades.forEach(skill => {
-            skill.classList.add('professional-skill')
-          });
-      }
-    }
-  },
-  listLink:[
-    {title:'INICIO',url:'inicio'},
-    {title:'SOBRE MI',url:'sobremi'},
-    {title:'SKILLS',url:'skills'},
-    {title:'CURRICULUM',url:'curriculum'},
-    {title:'PORTFOLIO',url:'portfolio'},
-    {title:'CONTACTO',url:'contacto'},
-  ],
-  socialNetworks:[
-    {title:'facebook',url:'https://www.facebook.com/alanfranco.silvahuarachi', icon:'fa-brands fa-facebook-f'},
-    {title:'github',url:'https://github.com/franco102', icon:'fa-brands fa-github'},
-    {title:'instagram',url:'https://www.instagram.com/silvahuarachi/', icon:'fa-brands fa-instagram'},
-    {title:'linkedin',url:'https://www.linkedin.com/in/alan-franco-silva-huarachi-82bb40167/', icon:'fa-brands fa-linkedin-in'}, 
-  ],
-  hobbies:[
-    {title:'JUEGOS',icon:'fa-solid fa-gamepad'},
-    {title:'MUSICA',icon:'fa-solid fa-headphones'},
-    {title:'VIAJAR',icon:'fa-solid fa-plane'},
-    {title:'PROGRAMAR',icon:'fa-solid fa-computer'},
-    {title:'DEPORTE',icon:'fa-solid fa-futbol'}, 
-    {title:'LIBROS',icon:'fa-solid fa-book'},
-    {title:'AUTOS',icon:'fa-solid fa-car'},
-    {title:'FOTOS',icon:'fa-solid fa-camera'},
-    {title:'ANIMALS',icon:'fa-solid fa-dog'},
-  ],
-  skills:[
-    {percentage:100,type:'professional',name:'Proactivo'},
-    {percentage:100,type:'professional',name:'Dedicación'},
-    {percentage:100,type:'professional',name:'Creatividad'},
-    {percentage:100,type:'professional',name:'Trabajo en Equipo'},
-    {percentage:100,type:'professional',name:'Resilencia'},
-    {percentage:100,type:'professional',name:'Liderazgo'},
-    {percentage:100,type:'professional',name:'Responzabilidad'},
-    {percentage:20,type:'technical',name:'C#'},
-    {percentage:85,type:'technical',name:'SQL-SERVER'},
-    {percentage:90,type:'technical',name:'JAVASCRIPT'},
-    {percentage:90,type:'technical',name:'HTML'},
-    {percentage:72,type:'technical',name:'CSS3'},
-    {percentage:75,type:'technical',name:'PHP'},
-    {percentage:70,type:'technical',name:'LARAVEL'},
-    {percentage:70,type:'technical',name:'MYSQL'},
-    {percentage:80,type:'technical',name:'VUE-JS'},
-    {percentage:60,type:'technical',name:'INFORMIX'},
-    {percentage:70,type:'technical',name:'PYTHON'},
-    {percentage:65,type:'technical',name:'FASTAPI'},
-    {percentage:60,type:'technical',name:'POSTGRESQL'},
-    {percentage:40,type:'technical',name:'MONGODB'},
-    {percentage:75,type:'technical',name:'BOOSTRAP'},
-    {percentage:55,type:'technical',name:'TAILWIND'},
-    {percentage:50,type:'technical',name:'DART'},
-    {percentage:40,type:'technical',name:'FLUTTER'},
-    {percentage:70,type:'technical',name:'REACT'},
-    {percentage:60,type:'technical',name:'TYPESCRIPT'},
-    {percentage:50,type:'technical',name:'NODE'},
-  ],
-  curriculum:[
-    {type:'education',tittle:'EDUCACIÓN PRIMARIA',subTitle:'COLEGIO JUAN VALER SANDOVAL',date:'(2005-2010)',description:'' },
-    {type:'education',tittle:'EDUCACIÓN SECUNDARIA',subTitle:'COLEGIO SANTO DOMINGO DE GUZMÁN',date:'(2011-2015)',description:'' },
-    {type:'education',tittle:'EDUCACIÓN UNIVERSITARIA',subTitle:'UNIVERSIDAD NACIONAL DEL CALLAO',date:'(2017 – 2021)',description:'- INGENIERA DE SISTEMAS(Tercio superior)' },
-    {type:'education',tittle:'INSTITUTO',subTitle:'INSTITUTO CULTURAL PERUANO NORTE AMERICANO',date:'(2019 – 2025)',description:'Actualmente Avanzado 5' },
-    {type:'education',tittle:'ESPECIALIZACIÓN',subTitle:'CIBERTEC:',date:'2024',description:'ESPECIALIZACIÓN EN BASE DE DATOS' },
-    {type:'job',tittle:'FENIXLOGISTIC',subTitle:'ANALISTA – PROGRAMADOR',date:'JUNIO 2020 - DICIEMBRE 2020',description:'Me desarrollé en área de desarrollo de software, realizando un sistema Logístico de la empresa Fénix Logistic S.A.C., siendo el proyecto desarrollado con el framework Laravel(back-end), VueJS (fron-end) y Bootstrap, para la gestión y versión del código se realizó con GitHub además asumí el cargo de desplegar el Software en un servidor Web.' },
-    {type:'job',tittle:'UNIVERSIDAD NACIONAL EL CALLAO',subTitle:'SOPORTE TÉCNICO',date:'SETIEMBRE 2021 - NOVIEMBRE 2021',description:'Me desarrollé en el de oficina de educación virtual realizando mantenimientos, conexión de equipos de cómputo, la gestión de áreas, además de encargar de la administración y creación de los correos de la universidad.' },
-    {type:'job',tittle:'MAPROSOFT',subTitle:'FULL STACK',date:'DICIEMBRE 2021 - ENERO -2024',description:'Me desarrollé en el área de TI realizando los requerimientos y automatizaciones de los procesos en mina Summa-Gold y Shougang desarrollando dashboard (AmcharTs4, APEX Chart, Chart-JS), mapas geológicos (Map-Box, leaflet), mantenimientos, registros, soporte en Base de Datos, Sistema de Dispatch (control en tiempo real de los equipos de mina) y para los diferentes procesos mina se realizó con (Devexpress-JS). El desarrollo se realizó con a ASP para el lado del back-end se trabajó con Procedure en SQL Server y el lado del fron-end con JavaScript, estilos con Bootstrap, para la gestión de tareas y versión del código se realizó Azure DevOps.' },
-    {type:'job',tittle:'URBANAO EXPRESS',subTitle:'FULL STACK',date:'FEBRERO 2024 – (actualmente',description:'Me desarrollo en el área de TI realizando los diferentes procesos logísticos del mercado a nivel de procedimientos almacenados como Informix y PostgreSQL, nivel de Back desarrollando APIS con PHP(Laravel) y con Python (FastAPI) así permitiendo la integración con empresas externas como LG, Ripley, Mercado Libre, etc., en ámbito de Front-End he trabajado con las siguientes tecnologías PHP, JavaScript, VueJS NUXT, React con NextJS, Boostrap, Tailwind-Css realizando paginas SPA, en laravel Modelo , Vista y Controlador, en conjunto realizando Deploy en Servidores con Nginx realizando implementación React, FastAPI, laravel, etc., además dando soporte en Base de Datos en las diferentes áreas como Facturación, Experiencia de Usuario, Cobranzas.' },
-  ],
-  portafolio:[
-    {img:'img/quisco-next.png',title:'Quisco',description:'Sistema de Ventas',url:'https://quiosco-next-wine.vercel.app/order/cafe'},
-    {img:'img/cocktail.png',title:'CockTailApp',description:'Preparación de Tragos',url:'https://bebidas-react-one.vercel.app'},
-    {img:'img/up-task.png',title:'Up-Task',description:'planer de proyectos',url:'https://up-task-sigma.vercel.app'},
-    {img:'img/pacientes_app.png',title:'PacientesApp',description:'Seguimiento de Pacientes Veterinaria',url:'https://pacientes-zustand-azure.vercel.app/'},
-    {img:'img/guitar-la.png',title:'GuitarLA',description:'Ventas de Instrumentos',url:'https://guitar-la-ghnl.vercel.app/'},
-    {img:'img/cripto_app.png',title:'CriptoApp',description:'Cotizador de Criptomonedas',url:'https://cripto-cotiza.vercel.app/'},
-    {img:'img/clima_app.png',title:'ClimaApp',description:'Buscador de clima',url:'https://clima-beta-umber.vercel.app/'},
-    {img:'img/gasto_app.png',title:'GastosApp',description:'Planificador de Gastos',url:'https://control-gastos-taupe.vercel.app/'},
-    {img:'img/admin_producto.png',title:'ProductosApp',description:'Administrador de Productos',url:'https://crud-product-rouge-theta.vercel.app/'},
-    {img:'img/contador_calories.png',title:'CaloriasApp',description:'Contador de Calorias',url:'https://calorie-tracker-dun.vercel.app/'},
-    {img:'img/propinas_app.png',title:'PropinasApp',description:'Calculadora con Propinas',url:'https://calculadora-propinas-gamma.vercel.app/'},
-    {img:'img/back_node.png',title:'BackProductApp',description:'Api de ProductoApp',url:'https://server-product-69pm.onrender.com/docs/#/Products'},
-    {img:'img/project_students.png',title:'Project Students',description:'Proyecto Estudiantes',url:'https://front-students-qfzbd3w2p-francosh102798s-projects.vercel.app'},
-  ]
-}); 
-
-
-export const usePortafalioStore=create<PortafolioState>()(
-  devtools(
-    persist(
-      immer(
-        portafalioStore
-      )
-       ,{
-          name:'portafolio-store',
-        }
-     )
-  )
+// Sin `persist`: el contenido es estático y guardarlo en localStorage
+// hacía que los visitantes vieran datos antiguos después de cada cambio.
+export const usePortafalioStore = create<PortafolioState>()(
+  devtools(() => ({
+    name: 'Alan Franco',
+    lastname: 'Silva Huarachi',
+    phone: '+51 964 118 376',
+    whatsapp: '51964118376',
+    email: 'francodannaeyal@gmail.com',
+    location: 'Lima, Perú',
+    position: 'Desarrollador Full Stack | Analista de Base de Datos',
+    cvEs: '/files/CV_Alan_Franco_Silva_2026_ES.pdf',
+    cvEn: '/files/CV_Alan_Franco_Silva_2026_EN.pdf',
+    listLink: [
+      { title: 'Sobre Mí', url: 'sobre-mi' },
+      { title: 'Stack', url: 'stack' },
+      { title: 'Experiencia', url: 'experiencia' },
+      { title: 'Proyectos', url: 'proyectos' },
+      { title: 'Contacto', url: 'contacto' },
+    ],
+    socialNetworks: [
+      { title: 'GitHub', url: 'https://github.com/franco102', icon: 'fa-brands fa-github' },
+      { title: 'LinkedIn', url: 'https://www.linkedin.com/in/alan-franco-silva-huarachi-82bb40167/', icon: 'fa-brands fa-linkedin-in' },
+      { title: 'WhatsApp', url: 'https://wa.me/51964118376', icon: 'fa-brands fa-whatsapp' },
+    ],
+    softSkills: [
+      { name: 'Proactividad', icon: 'bolt' },
+      { name: 'Liderazgo técnico', icon: 'flag' },
+      { name: 'Trabajo en equipo', icon: 'groups' },
+      { name: 'Resiliencia', icon: 'shield' },
+      { name: 'Responsabilidad', icon: 'task_alt' },
+    ],
+    skillGroups: [
+      {
+        title: 'Bases de Datos', icon: 'database', accent: 'secondary', note: 'Modelado & Migración',
+        items: ['PostgreSQL', 'PL/pgSQL', 'SQL Server', 'Informix', 'MySQL', 'MongoDB', 'Redis', 'Búsqueda vectorial'],
+      },
+      {
+        title: 'Backend', icon: 'dns', accent: 'tertiary', note: 'APIs REST',
+        items: ['PHP / Laravel', 'Python / FastAPI', 'C# / ASP.NET', 'Node.js', 'Go', 'TypeScript'],
+      },
+      {
+        title: 'Frontend & Móvil', icon: 'devices', accent: 'primary', note: 'SPAs & Apps',
+        items: ['Vue.js / Nuxt', 'React / Next.js', 'React Native', 'Angular', 'JavaScript', 'Tailwind CSS', 'Bootstrap', 'Flutter / Dart'],
+      },
+      {
+        title: 'Cloud & DevOps', icon: 'cloud', accent: 'amber', note: 'CI/CD',
+        items: ['AWS EC2', 'AWS S3', 'RDS / Aurora', 'AWS ECS', 'Docker', 'Kubernetes', 'GitHub Actions', 'Azure DevOps'],
+      },
+    ],
+    tools: [
+      { name: 'Linux (Ubuntu / Debian) & Nginx', icon: 'terminal', accent: 'secondary', tag: 'Servidores' },
+      { name: 'TLS en conexiones a BD', icon: 'lock', accent: 'tertiary', tag: 'Seguridad' },
+      { name: 'Mapbox & Leaflet', icon: 'map', accent: 'primary', tag: 'Geo' },
+      { name: 'AmCharts4 / ApexCharts', icon: 'monitoring', accent: 'amber', tag: 'Dashboards' },
+      { name: 'WebSockets', icon: 'sync_alt', accent: 'secondary', tag: 'Tiempo real' },
+      { name: 'Windows Server / IIS & Git', icon: 'deployed_code', accent: 'tertiary', tag: 'Deploy' },
+    ],
+    jobs: [
+      {
+        company: 'Urbano Express', date: 'Feb 2024 - Actualidad', current: true, accent: 'secondary',
+        roles: [
+          {
+            position: 'Analista de Base de Datos', date: 'Oct 2025 - Actualidad',
+            bullets: [
+              'Lidero la migración de procesos logísticos de Informix a PostgreSQL en AWS RDS (Aurora): modelado de tablas, índices y vistas, y migración y carga de información entre ambos motores.',
+              'Desarrollo stored procedures y funciones PL/pgSQL para las áreas de Facturación, Cobranzas y Experiencia de Usuario.',
+              'Configuré conexiones cifradas con TLS hacia la base de datos e implementé búsquedas vectoriales (similitud semántica) sobre PostgreSQL.',
+            ],
+          },
+          {
+            position: 'Desarrollador Full Stack', date: 'Feb 2024 - Set 2025',
+            bullets: [
+              'Diseñé y desarrollé APIs REST con Laravel y FastAPI para integrar los sistemas internos con socios como LG, Ripley y Mercado Libre.',
+              'Contenericé aplicaciones con Docker y Kubernetes y automaticé despliegues en AWS (EC2, S3, RDS, ECS) con CI/CD en GitHub Actions.',
+              'Administré servidores Linux con Nginx y desarrollé interfaces con Vue/Nuxt, React/Next.js, Angular y React Native.',
+            ],
+          },
+        ],
+        stack: ['PostgreSQL', 'Informix', 'AWS Aurora', 'Laravel', 'FastAPI', 'Docker', 'Kubernetes', 'MongoDB'],
+      },
+      {
+        company: 'Maprosoft', date: 'Dic 2021 - Ene 2024', current: false, accent: 'tertiary',
+        roles: [
+          {
+            position: 'Desarrollador Full Stack', date: '',
+            bullets: [
+              'Automaticé procesos operativos para clientes mineros (Summa Gold y Shougang), incluyendo un sistema de dispatch en tiempo real con WebSockets para el control de flota.',
+              'Desarrollé dashboards y mapas geológicos interactivos con AmCharts4, ApexCharts, Mapbox y Leaflet para la visualización de KPIs mineros.',
+              'Construí el backend con ASP.NET y SQL Server (stored procedures), con integración continua en Azure DevOps y despliegue en Windows Server / IIS.',
+            ],
+          },
+        ],
+        stack: ['C#', 'ASP.NET', 'SQL Server', 'DevExpress', 'Mapbox', 'Azure DevOps'],
+      },
+      {
+        company: 'Universidad Nacional del Callao', date: 'Set 2021 - Nov 2021', current: false, accent: 'primary',
+        roles: [
+          {
+            position: 'Soporte Técnico · Oficina de Educación Virtual', date: '',
+            bullets: ['Mantenimiento y conexión de equipos, y administración de cuentas de correo institucional.'],
+          },
+        ],
+        stack: [],
+      },
+      {
+        company: 'Fénix Logistic S.A.C.', date: 'Jun 2020 - Ene 2021', current: false, accent: 'amber',
+        roles: [
+          {
+            position: 'Analista Programador Jr.', date: '',
+            bullets: ['Desarrollé el sistema logístico de la empresa con Laravel y Vue.js, integrado con NubeFact para facturación electrónica según SUNAT, y lo desplegué en servidor web.'],
+          },
+        ],
+        stack: ['Laravel', 'Vue.js', 'Bootstrap', 'NubeFact'],
+      },
+    ],
+    education: [
+      { title: 'Bachiller en Ingeniería de Sistemas', institution: 'Universidad Nacional del Callao · Tercio superior', date: '2017 - 2021', icon: 'school' },
+      { title: 'Especialización en Bases de Datos', institution: 'CIBERTEC', date: '2024', icon: 'database' },
+      { title: 'Inglés Avanzado (Nivel 10)', institution: 'ICPNA · En curso', date: '2023 - 2026', icon: 'translate' },
+    ],
+    featured: [
+      {
+        kicker: 'Base de Datos // Urbano Express', badge: 'En curso', accent: 'secondary', icon: 'swap_horiz',
+        title: 'Migración Informix → PostgreSQL en AWS Aurora',
+        description: 'Modernización de la capa de datos logística: modelado de tablas, índices y vistas, migración de información entre motores, stored procedures PL/pgSQL, conexiones con TLS y búsquedas vectoriales.',
+        stack: ['Informix', 'PostgreSQL', 'PL/pgSQL', 'AWS Aurora', 'TLS'],
+      },
+      {
+        kicker: 'Integraciones // Retail', badge: 'Producción', accent: 'primary', icon: 'hub',
+        title: 'APIs de integración con LG, Ripley y Mercado Libre',
+        description: 'APIs REST en Laravel y FastAPI que conectan los sistemas internos de Urbano Express con socios comerciales, contenerizadas con Docker y Kubernetes y desplegadas en AWS.',
+        stack: ['Laravel', 'FastAPI', 'Docker', 'Kubernetes', 'AWS'],
+      },
+      {
+        kicker: 'Minería // Maprosoft', badge: 'Summa Gold & Shougang', accent: 'tertiary', icon: 'local_shipping',
+        title: 'Dispatch minero en tiempo real',
+        description: 'Control de flota en tiempo real con WebSockets, dashboards de KPIs y mapas geológicos interactivos para las operaciones mineras.',
+        stack: ['WebSockets', 'ASP.NET', 'SQL Server', 'Mapbox', 'Leaflet'],
+      },
+    ],
+    portafolio: [
+      { img: 'img/quisco-next.png', title: 'Quiosco', description: 'Sistema de ventas con Next.js', url: 'https://quiosco-next-wine.vercel.app/order/cafe' },
+      { img: 'img/up-task.png', title: 'Up-Task', description: 'Planificador de proyectos', url: 'https://up-task-sigma.vercel.app' },
+      { img: 'img/project_students.png', title: 'Project Students', description: 'Gestión de estudiantes', url: 'https://front-students-qfzbd3w2p-francosh102798s-projects.vercel.app' },
+      { img: 'img/back_node.png', title: 'BackProductApp', description: 'API REST de productos (Node)', url: 'https://server-product-69pm.onrender.com/docs/#/Products' },
+      { img: 'img/admin_producto.png', title: 'ProductosApp', description: 'Administrador de productos', url: 'https://crud-product-rouge-theta.vercel.app/' },
+      { img: 'img/pacientes_app.png', title: 'PacientesApp', description: 'Seguimiento de pacientes veterinaria', url: 'https://pacientes-zustand-azure.vercel.app/' },
+      { img: 'img/cocktail.png', title: 'CockTailApp', description: 'Buscador de recetas de tragos', url: 'https://bebidas-react-one.vercel.app' },
+      { img: 'img/guitar-la.png', title: 'GuitarLA', description: 'Tienda de instrumentos', url: 'https://guitar-la-ghnl.vercel.app/' },
+      { img: 'img/cripto_app.png', title: 'CriptoApp', description: 'Cotizador de criptomonedas', url: 'https://cripto-cotiza.vercel.app/' },
+      { img: 'img/clima_app.png', title: 'ClimaApp', description: 'Buscador de clima', url: 'https://clima-beta-umber.vercel.app/' },
+      { img: 'img/gasto_app.png', title: 'GastosApp', description: 'Planificador de gastos', url: 'https://control-gastos-taupe.vercel.app/' },
+      { img: 'img/contador_calories.png', title: 'CaloriasApp', description: 'Contador de calorías', url: 'https://calorie-tracker-dun.vercel.app/' },
+      { img: 'img/propinas_app.png', title: 'PropinasApp', description: 'Calculadora de propinas', url: 'https://calculadora-propinas-gamma.vercel.app/' },
+    ],
+  }), { name: 'portafolio-store' })
 );
